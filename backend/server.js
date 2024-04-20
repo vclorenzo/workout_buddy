@@ -24,4 +24,4 @@ mongoose
       console.log('connected to db and listening to port ', process.env.PORT);
     });
   })
-  .catch((err) => console.log(err));
+  .catch((error) => console.log(error));
