@@ -27,7 +27,6 @@ const Home = () => {
             </WorkoutDetails>
           ))}
       </div>
-
       <WorkoutForm />
     </div>
   );
