@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useWorkoutsContext } from '../hooks/useWorkoutsContext';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const WorkoutForm = () => {
   const { dispatch } = useWorkoutsContext();
@@ -9,14 +10,22 @@ const WorkoutForm = () => {
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
+  const { user } = useAuthContext();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!user) {
+      setError('You must be logged in');
+      return;
+    }
     const workout = { title, load, reps };
     const response = await fetch('/api/workouts', {
       method: 'POST',
       body: JSON.stringify(workout),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`,
       },
     });
 
@@ -41,7 +50,7 @@ const WorkoutForm = () => {
   return (
     <form className='create' onSubmit={handleSubmit}>
       <h3>Add a new workout</h3>
-      <label for='title'>Exercise Title</label>
+      <label htmlFor='title'>Exercise Title</label>
       <input
         type='text'
         id='title'
@@ -49,7 +58,7 @@ const WorkoutForm = () => {
         value={title}
         className={emptyFields.includes('title') ? 'error' : ''}
       />
-      <label for='load'>Load (in kg)</label>
+      <label htmlFor='load'>Load (in kg)</label>
       <input
         type='text'
         id='load'
@@ -57,7 +66,7 @@ const WorkoutForm = () => {
         value={load}
         className={emptyFields.includes('load') ? 'error' : ''}
       />
-      <label for='rep'>Reps</label>
+      <label htmlFor='rep'>Reps</label>
       <input
         type='text'
         id='rep'
