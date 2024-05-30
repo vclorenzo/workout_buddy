@@ -33,3 +33,7 @@ mongoose
     });
   })
   .catch((error) => console.log(error));
+
+app.get('/', (req, res) => {
+  res.status(201).json({ message: 'Connected to Backend!' });
+});
